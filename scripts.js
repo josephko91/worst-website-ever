@@ -11,16 +11,19 @@ document.addEventListener('DOMContentLoaded', () => {
   nameInputs.forEach((input) => {
     const picker = input.parentElement.querySelector('.picker');
 
-    // If picker is a select, populate it with A-Z options
-    if (picker && picker.tagName === 'SELECT') {
-      picker.innerHTML = letters.map(l => `<option value="${l}">${l}</option>`).join('');
-      picker.selectedIndex = 0;
-    }
 
-
-    // Focus handling: mark active on focus, remove on blur
-    input.addEventListener('focus', () => input.classList.add('active'));
-    input.addEventListener('blur', () => input.classList.remove('active'));
+    // Focus handling: mark active on focus, remove on blur and set a short-lived
+    // flag so a subsequent select change (which blurs the input) can still
+    // append the chosen letter.
+    input.addEventListener('focus', () => {
+      input.classList.add('active');
+      input.dataset.appendOnPick = '1';
+    });
+    input.addEventListener('blur', () => {
+      input.classList.remove('active');
+      // keep appendOnPick true for a short time so select change can occur
+      setTimeout(() => { delete input.dataset.appendOnPick; }, 300);
+    });
 
     // Click input focuses it (do not append on click)
     input.addEventListener('click', () => {
@@ -32,14 +35,15 @@ document.addEventListener('DOMContentLoaded', () => {
       picker.innerHTML = letters.map(l => `<option value="${l}">${l}</option>`).join('');
       picker.selectedIndex = 0;
       picker.addEventListener('change', () => {
-        // only append when the corresponding input is focused
-        if (document.activeElement === input) {
+        // append only if the input was recently focused (user intended to type)
+        if (input.dataset.appendOnPick === '1') {
           const letter = picker.value;
           input.value = (input.value || '') + letter;
           // reset picker back to first option to make repeated picks explicit
           picker.selectedIndex = 0;
+          delete input.dataset.appendOnPick;
         } else {
-          // focus the input so the user can insert
+          // otherwise focus the input so next change will append
           input.focus();
         }
       });
