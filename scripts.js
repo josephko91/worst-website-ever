@@ -17,19 +17,31 @@ document.addEventListener('DOMContentLoaded', () => {
       picker.selectedIndex = 0;
     }
 
-    // Click input to append selected letter (from select or fallback)
+
+    // Focus handling: mark active on focus, remove on blur
+    input.addEventListener('focus', () => input.classList.add('active'));
+    input.addEventListener('blur', () => input.classList.remove('active'));
+
+    // Click input focuses it (do not append on click)
     input.addEventListener('click', () => {
-      let letter = letters[0];
-      if (picker && picker.tagName === 'SELECT') letter = picker.value;
-      else letter = letters[parseInt(input.dataset.letterIndex || '0', 10)];
-      input.value = (input.value || '') + letter;
+      input.focus();
     });
 
-    // Click picker to insert as well (use change/click)
+    // If picker is a select, populate it with A-Z options and append on change
     if (picker && picker.tagName === 'SELECT') {
-      picker.addEventListener('click', () => {
-        const letter = picker.value;
-        input.value = (input.value || '') + letter;
+      picker.innerHTML = letters.map(l => `<option value="${l}">${l}</option>`).join('');
+      picker.selectedIndex = 0;
+      picker.addEventListener('change', () => {
+        // only append when the corresponding input is focused
+        if (document.activeElement === input) {
+          const letter = picker.value;
+          input.value = (input.value || '') + letter;
+          // reset picker back to first option to make repeated picks explicit
+          picker.selectedIndex = 0;
+        } else {
+          // focus the input so the user can insert
+          input.focus();
+        }
       });
     }
 
