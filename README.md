@@ -1,2 +1,8 @@
 # worst-website-ever
-trying to make the best worst website
+Goal: Creating the worst website experience possible. 
+
+## Live site
+https://josephko91.github.io/worst-website-ever
+
+## Warning
+May cause mild frustration.
