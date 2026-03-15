@@ -10,30 +10,26 @@ document.addEventListener('DOMContentLoaded', () => {
   // initialize pickers for each name input
   nameInputs.forEach((input) => {
     const picker = input.parentElement.querySelector('.picker');
-    input.dataset.letterIndex = '0';
-    if (picker) picker.textContent = letters[0];
 
-    // Wheel: change selected letter
-    input.addEventListener('wheel', (e) => {
-      e.preventDefault();
-      const dir = e.deltaY > 0 ? 1 : -1;
-      let idx = parseInt(input.dataset.letterIndex || '0', 10);
-      idx = (idx + dir + letters.length) % letters.length;
-      input.dataset.letterIndex = String(idx);
-      if (picker) picker.textContent = letters[idx];
-    }, { passive: false });
+    // If picker is a select, populate it with A-Z options
+    if (picker && picker.tagName === 'SELECT') {
+      picker.innerHTML = letters.map(l => `<option value="${l}">${l}</option>`).join('');
+      picker.selectedIndex = 0;
+    }
 
-    // Click input to append selected letter
+    // Click input to append selected letter (from select or fallback)
     input.addEventListener('click', () => {
-      const idx = parseInt(input.dataset.letterIndex || '0', 10);
-      input.value = (input.value || '') + letters[idx];
+      let letter = letters[0];
+      if (picker && picker.tagName === 'SELECT') letter = picker.value;
+      else letter = letters[parseInt(input.dataset.letterIndex || '0', 10)];
+      input.value = (input.value || '') + letter;
     });
 
-    // Click picker to insert as well
-    if (picker) {
+    // Click picker to insert as well (use change/click)
+    if (picker && picker.tagName === 'SELECT') {
       picker.addEventListener('click', () => {
-        const idx = parseInt(input.dataset.letterIndex || '0', 10);
-        input.value = (input.value || '') + letters[idx];
+        const letter = picker.value;
+        input.value = (input.value || '') + letter;
       });
     }
 
