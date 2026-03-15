@@ -1,0 +1,41 @@
+body{
+
+background:
+linear-gradient(90deg, red, yellow, blue, lime);
+
+font-family: Comic Sans MS;
+
+text-align:center;
+
+animation: spin 8s linear infinite;
+
+}
+
+h1{
+
+font-size:60px;
+color:magenta;
+
+}
+
+button{
+
+font-size:30px;
+padding:20px;
+cursor:crosshair;
+
+}
+
+input{
+
+font-size:20px;
+margin:10px;
+
+}
+
+@keyframes spin{
+
+0%{transform:rotate(0deg)}
+100%{transform:rotate(1deg)}
+
+}
