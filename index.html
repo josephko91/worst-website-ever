@@ -11,19 +11,30 @@
 <h1>WELCOME</h1>
 <p>This website technically works.</p>
 
-<button id="startButton">Start Experience</button>
+<button id="startButton" type="button">Start Experience</button>
 
 <div id="uselessForm">
 
 <h2>Please Fill Out This Important Form</h2>
 
-<input placeholder="First name">
-<input placeholder="Middle name">
-<input placeholder="Last name">
+<p>Use your mouse wheel to scroll through letters A–Z, click the input to insert the selected letter, right-click to delete the last letter.</p>
+
+<div class="name-row">
+    <input class="name-input" placeholder="First name" readonly>
+    <span class="picker">A</span>
+</div>
+<div class="name-row">
+    <input class="name-input" placeholder="Middle name" readonly>
+    <span class="picker">A</span>
+</div>
+<div class="name-row">
+    <input class="name-input" placeholder="Last name" readonly>
+    <span class="picker">A</span>
+</div>
 
 <br><br>
 
-<button id="submitButton">Submit</button>
+<button id="submitButton" type="button">Submit</button>
 
 </div>
 
